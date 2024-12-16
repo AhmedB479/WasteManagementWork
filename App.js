@@ -6,6 +6,7 @@ import LoginScreen from './screens/LoginScreen';
 import AdminPanel from './screens/AdminPanel';
 import CustomerPanel from './screens/CustomerPanel';
 import GarbageCollectorPanel from './screens/GarbageCollectorPanel';
+import Signup from './screens/Signup';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +14,8 @@ export default function App() {
   return (
     <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="GarbageCollectorPanel">
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen name='Signup' component={Signup}/>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="AdminPanel" component={AdminPanel} />
           <Stack.Screen name="CustomerPanel" component={CustomerPanel} />

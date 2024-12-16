@@ -8,9 +8,7 @@ export default function LoginScreen({ navigation }) {
   const { login } = useContext(AuthContext);
 
   const handleLogin = () => {
-    const role = username.toLowerCase();
-    login({ username, role });
-    navigation.navigate(`${role.charAt(0).toUpperCase() + role.slice(1)}Panel`);
+    
   };
 
   return (
@@ -29,6 +27,7 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
       />
       <Button title="Login" onPress={handleLogin} />
+      <Button title="Signup" onPress={() => navigation.navigate('Signup')} />
     </View>
   );
 }
