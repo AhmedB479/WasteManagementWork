@@ -1,20 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { AuthProvider } from './context/AuthContext';
+import LoginScreen from './screens/LoginScreen';
+import AdminPanel from './screens/AdminPanel';
+import CustomerPanel from './screens/CustomerPanel';
+import GarbageCollectorPanel from './screens/GarbageCollectorPanel';
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AuthProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="GarbageCollectorPanel">
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="AdminPanel" component={AdminPanel} />
+          <Stack.Screen name="CustomerPanel" component={CustomerPanel} />
+          <Stack.Screen name="GarbageCollectorPanel" component={GarbageCollectorPanel} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
