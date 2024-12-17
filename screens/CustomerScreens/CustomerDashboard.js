@@ -8,26 +8,28 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
-export default function CustomerDashboard({ navigation }) {
+const { width } = Dimensions.get("window");
 
- const [curLoc, setCurLoc] = useState({
-   latitude: 24.8227,
-   longitude: 67.06, 
- });
+export default function CustomerDashboard({ navigation }) {
+  const [curLoc, setCurLoc] = useState({
+    latitude: 24.8227,
+    longitude: 67.06,
+  });
 
   const [hasLocationPermission, setHasLocationPermission] = useState(null);
   const mapRef = useRef(null);
 
   // Sample history data
   const history = [
-    { id: "1", name: "Ada Lovelace", date: "2024-12-10" },
-    { id: "2", name: "Alan Turing", date: "2024-12-11" },
-    { id: "3", name: "Grace Hopper", date: "2024-12-12" },
+    { id: "1", name: "Ada Lovelace", date: "2024-12-10", status: "Completed" },
+    { id: "2", name: "Alan Turing", date: "2024-12-11", status: "In Progress" },
+    { id: "3", name: "Grace Hopper", date: "2024-12-12", status: "Scheduled" },
   ];
 
   // These delta values control zoom
@@ -36,12 +38,10 @@ export default function CustomerDashboard({ navigation }) {
 
   // Function to request location permission and get current location
   const getLocation = async () => {
-    // Request permission to access location
-    const { status } = await Location.requestPermissionsAsync();
+    const { status } = await Location.requestForegroundPermissionsAsync();
     setHasLocationPermission(status === "granted");
 
     if (status === "granted") {
-      // Get the current location
       const location = await Location.getCurrentPositionAsync({});
       setCurLoc({
         latitude: location.coords.latitude,
@@ -50,89 +50,106 @@ export default function CustomerDashboard({ navigation }) {
     }
   };
 
-  // Update location every 5 seconds (or as needed)
   useEffect(() => {
-    getLocation(); // Get the initial location
-
-    const locationInterval = setInterval(() => {
-      getLocation(); // Update location periodically
-    }, 5000); // Updates every 5 seconds
-
-    // Clean up the interval when the component is unmounted
+    getLocation();
+    const locationInterval = setInterval(getLocation, 5000);
     return () => clearInterval(locationInterval);
   }, []);
 
+  const renderHistoryItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.historyItem}
+      onPress={() => navigation.navigate("HistoryScreen", { item })}
+    >
+      <View style={styles.historyItemLeft}>
+        <Image
+          source={{ uri: "https://i.pravatar.cc/100?u=" + item.id }}
+          style={styles.avatar}
+        />
+        <View>
+          <Text style={styles.historyItemName}>{item.name}</Text>
+          <Text style={styles.historyItemDate}>{item.date}</Text>
+        </View>
+      </View>
+      <View style={styles.historyItemRight}>
+        <Text
+          style={[
+            styles.historyItemStatus,
+            { color: getStatusColor(item.status) },
+          ]}
+        >
+          {item.status}
+        </Text>
+        <Ionicons name="chevron-forward" size={20} color="#6a11cb" />
+      </View>
+    </TouchableOpacity>
+  );
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Completed":
+        return "#4CAF50";
+      case "In Progress":
+        return "#FFC107";
+      case "Scheduled":
+        return "#2196F3";
+      default:
+        return "#757575";
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* Main Content */}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.cardContainer}>
-          {/* Location */}
-          <View style={styles.graphPlaceholder}>
-            <MapView
-              ref={mapRef}
-              style={StyleSheet.absoluteFillObject}
-              initialRegion={{
-                latitude: curLoc.latitude,
-                longitude: curLoc.longitude,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA,
-              }}
-              showsUserLocation={true} // Show user's location
-              followsUserLocation={true} // Keep updating map as location changes
-            >
-              {/* Add marker for current location */}
-              <Marker coordinate={curLoc} title="Current Location" />
-            </MapView>
-          </View>
+      {/* <View style={styles.header}>
+        <Text style={styles.headerTitle}>Dashboard</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+          <Ionicons name="person-circle-outline" size={30} color="#6a11cb" />
+        </TouchableOpacity>
+      </View> */}
 
-          {/* History */}
-          <Text
-            style={styles.sectionTitle}
-            
-          >
-            History
-          </Text>
-          <FlatList
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.collectorItem}>
-                <Image
-                  source={{
-                    uri: "https://img.icons8.com/ios/50/user.png",
-                  }}
-                  style={styles.avatar}
-                />
-                <Text style={styles.collectorName}>{item.name}</Text>
-                <Text style={styles.collectorAmount}>{item.date}</Text>
-              </View>
-            )}
-          />
-          {/* Customer Care Section */}
-          <View
-            style={{
-              padding: 20,
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.mapContainer}>
+          <MapView
+            ref={mapRef}
+            style={styles.map}
+            initialRegion={{
+              latitude: curLoc.latitude,
+              longitude: curLoc.longitude,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
             }}
+            showsUserLocation={true}
+            followsUserLocation={true}
           >
-            {history.length > 0 ? (
-              history.map((item) => (
-                <TouchableOpacity
-                  key={item.id}
-                  style={styles.customerCareButton}
-                  onPress={() => navigation.navigate("HistoryScreen", { item })}
-                >
-                  <Text style={styles.customerCareButtonText}>
-                    {item.name}, {item.date}
-                  </Text>
-                  <Ionicons name="chevron-forward" size={24} color="#6a11cb" />
-                </TouchableOpacity>
-              ))
-            ) : (
-              <Text style={styles.customerCareButtonText}>No History</Text>
-            )}
-          </View>
+            <Marker coordinate={curLoc} title="Current Location" />
+          </MapView>
+        </View>
+
+        <View style={styles.contentContainer}>
+          <Text style={styles.sectionTitle}>Recent Activity</Text>
+          <FlatList
+            data={history}
+            renderItem={renderHistoryItem}
+            keyExtractor={(item) => item.id}
+            scrollEnabled={false}
+          />
+
+          <TouchableOpacity
+            style={styles.viewAllButton}
+            onPress={() => navigation.navigate("FullHistory")}
+          >
+            <Text style={styles.viewAllButtonText}>View All History</Text>
+            <Ionicons name="arrow-forward" size={20} color="#6a11cb" />
+          </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => navigation.navigate("NewRequest")}
+      >
+        <Ionicons name="add" size={30} color="#FFFFFF" />
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -140,79 +157,104 @@ export default function CustomerDashboard({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#FFFFFF",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 20,
-    backgroundColor: "#0C0C0C",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
   },
-  backButton: {
+  headerTitle: {
     fontSize: 24,
-    color: "#fff",
-  },
-  title: {
-    fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#333333",
   },
-  icon: {
-    width: 24,
-    height: 24,
-    tintColor: "#fff",
+  mapContainer: {
+    height: 250,
+    marginBottom: 20,
   },
-  cardContainer: {
-    padding: 0,
+  map: {
+    ...StyleSheet.absoluteFillObject,
   },
-  sectionTitle: {
-    fontSize: 32,
-    fontWeight: "bold",
-    marginVertical: 10,
-    color: "#333",
+  contentContainer: {
     paddingHorizontal: 20,
   },
-  graphPlaceholder: {
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
-    height: 300,
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333333",
   },
-  collectorItem: {
+  historyItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: 10,
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#E0E0E0",
+  },
+  historyItemLeft: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 15,
   },
-  collectorName: {
-    flex: 1,
+  historyItemName: {
     fontSize: 16,
-    color: "#555",
+    fontWeight: "600",
+    color: "#333333",
   },
-  collectorAmount: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
+  historyItemDate: {
+    fontSize: 14,
+    color: "#757575",
+    marginTop: 2,
   },
-  customerCareButton: {
+  historyItemRight: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#f8f8f8",
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 20,
   },
-  customerCareButtonText: {
+  historyItemStatus: {
+    fontSize: 14,
+    fontWeight: "500",
+    marginRight: 10,
+  },
+  viewAllButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    paddingVertical: 12,
+    backgroundColor: "#F0E6FA",
+    borderRadius: 8,
+  },
+  viewAllButtonText: {
     fontSize: 16,
     fontWeight: "600",
     color: "#6a11cb",
+    marginRight: 5,
+  },
+  floatingButton: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: "#6a11cb",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
 });

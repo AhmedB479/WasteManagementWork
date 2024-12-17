@@ -1,10 +1,20 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 
 const Main = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome To Go Green</Text>
+      {/* <Text style={styles.title}>Welcome To Go Green</Text> */}
+      <View>
+        <Image
+          source={require("../assets/logo.png")}
+          style={{
+            height: 250,
+            width: 250,
+          }}
+          resizeMode="contain"
+        />
+      </View>
 
       <TouchableOpacity
         onPress={() => navigation.navigate("Login", { role: "customer" })}
@@ -35,7 +45,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#5FCC9C",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -45,15 +55,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#fff",
     paddingVertical: 10,
-    paddingHorizontal: 20,
     borderRadius: 5,
     marginVertical: 10,
+    width: 200,
+    borderColor: "#319e4e",
+    borderWidth: 1,
+    borderRadius: 8,
   },
   buttonText: {
-    color: "#fff",
+    color: "#319e4e",
     fontSize: 16,
     fontWeight: "600",
+    textAlign: "center",
   },
 });

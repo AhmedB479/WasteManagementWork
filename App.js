@@ -138,6 +138,35 @@ function AdminDrawer() {
 
 
 
+function CustomerDrawer() {
+  return (
+    <Drawer.Navigator
+      initialRouteName="Dashboard"
+      // drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: "#fff",
+          width: 240,
+        },
+      }}
+    >
+      <Drawer.Screen
+        name="Dashboard"
+        component={CustomerDashboard}
+        options={{
+          drawerLabel: "Dashboard",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="grid" size={size} color={color} />
+          ),
+        }}
+      />
+    
+    </Drawer.Navigator>
+  );
+}
+
+
+
 // Main Stack Navigation
 export default function App() {
   return (
@@ -168,10 +197,15 @@ export default function App() {
           component={EditCollectorScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Customer"
+        {/* <Stack.Screen
+          name="Customer Dashboard"
           component={CustomerDashboard}
           // options={{ headerShown: false }}
+        /> */}
+        <Stack.Screen
+          name="Customer"
+          component={CustomerDrawer}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

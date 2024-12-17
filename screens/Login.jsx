@@ -102,7 +102,13 @@
 
 
 import React from "react";
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
 const Login = ({ route, navigation }) => {
   // Destructure 'role' from the navigation params
@@ -121,8 +127,19 @@ const Login = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <Text style={styles.roleText}>Role: {role}</Text>
+      {/* <Text style={styles.title}>{role} Login</Text>
+      <Text style={styles.roleText}>Role: {role}</Text> */}
+      <View
+        style={{
+          display: "flex",
+          flexDirection:'row',
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text style={styles.roleText}>{role}</Text>
+        <Text style={styles.title}> Login</Text>
+      </View>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -130,7 +147,10 @@ const Login = ({ route, navigation }) => {
         autoCapitalize="none"
       />
       <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      <Button title="Login" onPress={handleLogin} />
+      {/* <Button title="Login" /> */}
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -140,19 +160,23 @@ export default Login;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#5FCC9C",
     alignItems: "center",
     justifyContent: "center",
   },
   title: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 20,
+    color: "#fff",
+    textTransform: "capitalize",
   },
   roleText: {
-    fontSize: 18,
-    color: "green",
+    fontSize: 25,
+    fontWeight: "bold",
     marginBottom: 20,
+    color: "#fff",
+    textTransform: "capitalize",
   },
   input: {
     width: "80%",
@@ -161,6 +185,23 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+    backgroundColor: "#fff",
+  },
+  button: {
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginVertical: 10,
+    width: "80%",
+    borderColor: "#319e4e",
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#319e4e",
+    fontSize: 16,
+    fontWeight: "600",
+    textAlign: "center",
   },
 });
 
