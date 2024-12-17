@@ -43,6 +43,8 @@ import CustomerCareScreen from "./screens/AdminScreens/CustomerCare";
 import AdminDashboard from "./screens/AdminScreens/AdminDashboard";
 import GarbagePortalScreen from "./screens/AdminScreens/GarbagePortalScreen";
 import AddCollectorScreen from "./screens/AdminScreens/AddCollectorScreen";
+import Pickups from "./screens/CollectorScreens/PicksUps";
+import { ComplaintProvider } from "./context/ComplaintContext";
 
 import {
   createDrawerNavigator,
@@ -52,6 +54,10 @@ import {
 import EditCollectorScreen from "./screens/AdminScreens/EditCollectorScreen";
 import CustomerComplaintScreen from "./screens/AdminScreens/CustomerComplaintScreen";
 import CustomerDashboard from "./screens/CustomerScreens/CustomerDashboard";
+import CollectorDashboard from "./screens/CollectorScreens/CollectorDashboard";
+import LodgeComplaintScreen from "./screens/CustomerScreens/LodgeComplaintScreen";
+import GarbageCollectionScreen from "./screens/CustomerScreens/GarbageCollectionScreen";
+import Loader from "./screens/Loader";
 // import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -136,9 +142,7 @@ function AdminDrawer() {
   );
 }
 
-
-
-function CustomerDrawer() {
+function CollectorDrawer() {
   return (
     <Drawer.Navigator
       initialRouteName="Dashboard"
@@ -152,7 +156,7 @@ function CustomerDrawer() {
     >
       <Drawer.Screen
         name="Dashboard"
-        component={CustomerDashboard}
+        component={CollectorDashboard}
         options={{
           drawerLabel: "Dashboard",
           drawerIcon: ({ color, size }) => (
@@ -160,7 +164,66 @@ function CustomerDrawer() {
           ),
         }}
       />
-    
+      <Drawer.Screen
+        name="Pick ups"
+        component={Pickups}
+        options={{
+          drawerLabel: "Pick ups",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="location-outline" size={size} color={color} />
+          ),
+        }}
+      />
+    </Drawer.Navigator>
+  );
+}
+
+
+
+function CustomerDrawer() {
+  return (
+    <Drawer.Navigator
+      initialRouteName="Home"
+      // drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: "#fff",
+          width: 240,
+        },
+      }}
+    >
+      <Drawer.Screen
+        name="Home"
+        component={CustomerDashboard}
+        options={{
+          drawerLabel: "Home",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
+
+      {/* <Drawer.Screen
+        name="Profile"
+        component={CustomerDashboard}
+        options={{
+          drawerLabel: "Profile",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      /> */}
+
+      <Drawer.Screen
+        name="Complaint"
+        component={GarbageCollectionScreen}
+        options={{
+          drawerLabel: "Complaint",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="document" size={size} color={color} />
+          ),
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -170,45 +233,61 @@ function CustomerDrawer() {
 // Main Stack Navigation
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Admin"
-          component={AdminDrawer}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AddCollector"
-          component={AddCollectorScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="EditCollector"
-          component={EditCollectorScreen}
-          options={{ headerShown: false }}
-        />
-        {/* <Stack.Screen
+    <ComplaintProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Main">
+          <Stack.Screen
+            name="Main"
+            component={Main}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Loader"
+            component={Loader}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Admin"
+            component={AdminDrawer}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddCollector"
+            component={AddCollectorScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditCollector"
+            component={EditCollectorScreen}
+            options={{ headerShown: false }}
+          />
+          {/* <Stack.Screen
           name="Customer Dashboard"
           component={CustomerDashboard}
           // options={{ headerShown: false }}
         /> */}
-        <Stack.Screen
-          name="Customer"
-          component={CustomerDrawer}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="Customer"
+            component={CustomerDrawer}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="LodgeComplaint"
+            component={LodgeComplaintScreen}
+          />
+          <Stack.Screen
+            name="Collector"
+            component={CollectorDrawer}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ComplaintProvider>
   );
 }
 

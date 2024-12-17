@@ -13,6 +13,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
+import Loader from "../Loader";
 
 const { width } = Dimensions.get("window");
 
@@ -97,6 +98,24 @@ export default function CustomerDashboard({ navigation }) {
         return "#757575";
     }
   };
+
+
+  
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+  
+    useEffect(() => {
+      // Simulate a 2-second loading time
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+  
+      return () => clearTimeout(timer); // Cleanup timer on unmount
+    }, []);
+
+     if (isLoading) {
+       // Show the Loader component while loading
+       return <Loader />;
+     }
 
   return (
     <SafeAreaView style={styles.container}>

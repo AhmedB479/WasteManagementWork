@@ -101,7 +101,7 @@
 
 
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -109,21 +109,38 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import Loader from "./Loader";
 
 const Login = ({ route, navigation }) => {
   // Destructure 'role' from the navigation params
   const { role } = route.params;
+
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+
+  useEffect(() => {
+    // Simulate a 2-second loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []);
 
   // Function to handle Login button press
   const handleLogin = () => {
     if (role === "admin") {
       navigation.navigate("Admin");
     } else if (role === "collector") {
-      // navigation.navigate("Collector");
+      navigation.navigate("Collector");
     } else if (role === "customer") {
       navigation.navigate("Customer");
     }
   };
+
+  if (isLoading) {
+    // Show the Loader component while loading
+    return <Loader />;
+  }
 
   return (
     <View style={styles.container}>

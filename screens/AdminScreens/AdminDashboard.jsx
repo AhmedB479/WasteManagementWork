@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,10 +13,27 @@ import { Ionicons } from '@expo/vector-icons';
 import CircularProgress from "react-native-circular-progress-indicator";
 import { BarChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import Loader from '../Loader';
 
 const screenWidth = Dimensions.get("window").width;
 
 export default function AdminDashboard({ navigation }) {
+  const [isLoading, setIsLoading] = useState(true); // Loading state
+
+  useEffect(() => {
+    // Simulate a 2-second loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []);
+
+  if (isLoading) {
+    // Show the Loader component while loading
+    return <Loader />;
+  }
+
   const garbageCollectors = [
     { id: '1', name: 'Ada Lovelace', amount: '$1200.50' },
     { id: '2', name: 'Mark Hopper', amount: '$932.25' },

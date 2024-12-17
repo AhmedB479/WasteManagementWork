@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import LottieView from "lottie-react-native";
 
 const Main = ({ navigation }) => {
   return (
@@ -7,12 +8,24 @@ const Main = ({ navigation }) => {
       {/* <Text style={styles.title}>Welcome To Go Green</Text> */}
       <View>
         <Image
-          source={require("../assets/logo.png")}
+          source={require("../assets/log.png")}
           style={{
             height: 250,
             width: 250,
+            filter: "  filter: drop-shadow(10px 7px 10px rgb(84, 116, 84))",
+
           }}
-          resizeMode="contain"
+          resizeMode="contain"a
+        />
+      </View>
+
+      {/* Lottie Animation */}
+      <View style={styles.animationContainer}>
+        <LottieView
+          source={require("../assets/truck-animation.json")} // Place the animation JSON file locally
+          autoPlay
+          loop
+          style={{ width: 200, height: 300 }}
         />
       </View>
 
@@ -45,7 +58,7 @@ export default Main;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#5FCC9C",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -55,17 +68,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#fff",
+    backgroundColor: "rgb(71, 155, 71)",
     paddingVertical: 10,
     borderRadius: 5,
     marginVertical: 10,
     width: 200,
-    borderColor: "#319e4e",
-    borderWidth: 1,
+    // borderColor: "rgb(0, 255, 0)",
+    // borderWidth: 2,
     borderRadius: 8,
   },
   buttonText: {
-    color: "#319e4e",
+    color: "#fff",
     fontSize: 16,
     fontWeight: "600",
     textAlign: "center",

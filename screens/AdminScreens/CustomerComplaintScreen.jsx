@@ -1,42 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
   FlatList,
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
   TouchableOpacity,
-  Alert,
 } from "react-native";
+
 import { Ionicons } from "@expo/vector-icons";
+import { useComplaints } from "../../context/ComplaintContext";
 
 const CustomerComplaintScreen = ({ navigation }) => {
-  const [complaints, setComplaints] = useState([
-    {
-      id: "1",
-      customer: "John Doe",
-      nature: "Missed pickup",
-      status: "Unaddressed",
-      priority: "Normal",
-      date: "2023-06-01",
-    },
-    {
-      id: "2",
-      customer: "Jane Smith",
-      nature: "Rude staff",
-      status: "Ongoing",
-      priority: "High",
-      date: "2023-05-30",
-    },
-    {
-      id: "3",
-      customer: "Bob Johnson",
-      nature: "Billing issue",
-      status: "Complete",
-      priority: "Low",
-      date: "2023-05-28",
-    },
-  ]);
+  const { complaints, updateComplaint } = useComplaints();
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -73,17 +49,11 @@ const CustomerComplaintScreen = ({ navigation }) => {
     const currentIndex = priorities.indexOf(currentPriority);
     const nextPriority = priorities[(currentIndex + 1) % priorities.length];
 
-    setComplaints(
-      complaints.map((complaint) =>
-        complaint.id === id
-          ? { ...complaint, priority: nextPriority }
-          : complaint
-      )
-    );
+    updateComplaint(id, { priority: nextPriority });
   };
 
   const renderComplaint = ({ item }) => (
-    <View style={styles.complaintItem}>
+    <View style={styles.complaintCard}>
       <View style={styles.complaintHeader}>
         <Text style={styles.customerName}>{item.customer}</Text>
         <Text style={[styles.status, { color: getStatusColor(item.status) }]}>
@@ -94,11 +64,11 @@ const CustomerComplaintScreen = ({ navigation }) => {
       <View style={styles.complaintFooter}>
         <Text style={styles.date}>{item.date}</Text>
         <TouchableOpacity
+          onPress={() => changePriority(item.id, item.priority)}
           style={[
-            styles.priorityButton,
+            styles.priorityBadge,
             { backgroundColor: getPriorityColor(item.priority) },
           ]}
-          onPress={() => changePriority(item.id, item.priority)}
         >
           <Text style={styles.priorityText}>{item.priority}</Text>
         </TouchableOpacity>
@@ -108,11 +78,18 @@ const CustomerComplaintScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="menu" size={24} color="#333" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Customer Complaint</Text>
+        <View style={{ width: 24 }} />
+      </View>
       <FlatList
         data={complaints}
         renderItem={renderComplaint}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={styles.listContainer}
       />
     </SafeAreaView>
   );
@@ -125,8 +102,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
@@ -136,20 +113,20 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
   },
-  list: {
-    padding: 20,
+  listContainer: {
+    padding: 16,
   },
-  complaintItem: {
+  complaintCard: {
     backgroundColor: "#f8f8f8",
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
   },
   complaintHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 8,
   },
   customerName: {
     fontSize: 16,
@@ -163,7 +140,7 @@ const styles = StyleSheet.create({
   nature: {
     fontSize: 14,
     color: "#666",
-    marginBottom: 10,
+    marginBottom: 12,
   },
   complaintFooter: {
     flexDirection: "row",
@@ -174,10 +151,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#999",
   },
-  priorityButton: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 15,
+  priorityBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
   },
   priorityText: {
     color: "#fff",
