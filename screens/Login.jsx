@@ -103,12 +103,14 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  StyleSheet,
   View,
   Text,
-  TextInput,
+  StyleSheet,
   TouchableOpacity,
+  TextInput,
+  Image,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import Loader from "./Loader";
 
 const Login = ({ route, navigation }) => {
@@ -144,81 +146,156 @@ const Login = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>{role} Login</Text>
-      <Text style={styles.roleText}>Role: {role}</Text> */}
+      <Text style={styles.heading}>Login</Text>
+      <View style={styles.inputContainer}>
+        <Ionicons
+          name="mail-outline"
+          size={20}
+          color="gray"
+          style={styles.icon}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          // value={email}
+          // onChangeText={handleInputChange(setEmail)}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Ionicons
+          name="lock-closed-outline"
+          size={20}
+          color="gray"
+          style={styles.icon}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          // value={password}
+          // onChangeText={handleInputChange(setPassword)}
+          secureTextEntry
+        />
+      </View>
+
+      <TouchableOpacity onPress={handleLogin} style={styles.button}>
+        <Text style={styles.buttonText}>Log In</Text>
+      </TouchableOpacity>
+
+      <View>
+        <Text
+          style={{
+            textAlign: "center",
+          }}
+        >
+          Or, Login with
+        </Text>
+        <View style={styles.imgContainerWrap}>
+          <View style={styles.imgContainer}>
+            <Image
+              source={require("../Images/Google.png")}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={styles.imgContainer}>
+            <Image
+              source={require("../Images/Facebook.png")}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={styles.imgContainer}>
+            <Image
+              source={require("../Images/Twitter.png")}
+              resizeMode="contain"
+            />
+          </View>
+        </View>
+      </View>
+
       <View
         style={{
           display: "flex",
-          flexDirection:'row',
-          alignItems: "center",
-          justifyContent: "center",
+          flexDirection: "row",
         }}
       >
-        <Text style={styles.roleText}>{role}</Text>
-        <Text style={styles.title}> Login</Text>
+        <Text>Don't have an Account? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+          <Text
+            style={{
+              color: "rgb(71, 155, 71)",
+            }}
+          >
+            Signup
+          </Text>
+        </TouchableOpacity>
       </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-      {/* <Button title="Login" /> */}
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
     </View>
   );
 };
 
-export default Login;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#5FCC9C",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
-  title: {
-    fontSize: 25,
-    fontWeight: "bold",
+  heading: {
+    width: "100%",
+    textAlign: "left",
+    paddingLeft: 20,
+    fontSize: 24,
     marginBottom: 20,
-    color: "#fff",
-    textTransform: "capitalize",
   },
-  roleText: {
-    fontSize: 25,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#fff",
-    textTransform: "capitalize",
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingHorizontal: 5,
+    paddingBottom: 2,
+    width: "90%",
+  },
+  icon: {
+    marginRight: 10,
   },
   input: {
-    width: "80%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: "#fff",
+    flex: 1,
+    fontSize: 16,
+  },
+  text: {
+    fontSize: 24,
+    marginBottom: 20,
   },
   button: {
-    backgroundColor: "#fff",
-    paddingVertical: 10,
+    backgroundColor: "#rgb(71, 155, 71)",
+    width: "90%",
     borderRadius: 5,
-    marginVertical: 10,
-    width: "80%",
-    borderColor: "#319e4e",
-    borderWidth: 1,
-    borderRadius: 8,
+    padding: 10,
+    marginVertical: 20,
   },
   buttonText: {
-    color: "#319e4e",
+    color: "#fff",
     fontSize: 16,
-    fontWeight: "600",
     textAlign: "center",
+  },
+  imgContainerWrap: {
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+    margin: 20,
+  },
+  imgContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
   },
 });
 
+export default Login;
