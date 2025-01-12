@@ -58,6 +58,7 @@ import CollectorDashboard from "./screens/CollectorScreens/CollectorDashboard";
 import LodgeComplaintScreen from "./screens/CustomerScreens/LodgeComplaintScreen";
 import GarbageCollectionScreen from "./screens/CustomerScreens/GarbageCollectionScreen";
 import Loader from "./screens/Loader";
+import CollectorNotifications from "./screens/CollectorScreens/CollectorNotifications";
 // import { Ionicons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
@@ -171,6 +172,21 @@ function CollectorDrawer() {
           drawerLabel: "Pick ups",
           drawerIcon: ({ color, size }) => (
             <Ionicons name="location-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Notifications"
+        component={CollectorNotifications}
+        options={{
+          drawerLabel: "Notifications",
+          drawerIcon: ({ color, size }) => (
+            <Ionicons name="notifications" size={size} color={color} />
+          ),
+          headerRight: () => (
+            <Ionicons name="notifications" size={24} color="#FFD700" style={{
+              marginRight:15
+            }} />
           ),
         }}
       />
