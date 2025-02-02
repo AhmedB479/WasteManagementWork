@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Image,
 } from "react-native";
 import MapView, { Marker, Polyline } from "react-native-maps";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -41,7 +42,7 @@ const Pickups = () => {
       </View>
 
       <View style={styles.mapContainer}>
-        <MapView
+        {/* <MapView
           style={styles.map}
           initialRegion={{
             latitude: 24.82,
@@ -61,7 +62,12 @@ const Pickups = () => {
             strokeColor="#4a90e2"
             strokeWidth={3}
           />
-        </MapView>
+        </MapView> */}
+        <Image
+          source={require("../../Images/map.png")}
+          style={styles.map}
+          resizeMode="cover"
+        />
       </View>
 
       <View style={styles.actionButtons}>

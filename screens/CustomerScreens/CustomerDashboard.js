@@ -99,23 +99,21 @@ export default function CustomerDashboard({ navigation }) {
     }
   };
 
+  const [isLoading, setIsLoading] = useState(true); // Loading state
 
-  
-    const [isLoading, setIsLoading] = useState(true); // Loading state
-  
-    useEffect(() => {
-      // Simulate a 2-second loading time
-      const timer = setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
-  
-      return () => clearTimeout(timer); // Cleanup timer on unmount
-    }, []);
+  useEffect(() => {
+    // Simulate a 2-second loading time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
-     if (isLoading) {
-       // Show the Loader component while loading
-       return <Loader />;
-     }
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, []);
+
+  if (isLoading) {
+    // Show the Loader component while loading
+    return <Loader />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -128,7 +126,7 @@ export default function CustomerDashboard({ navigation }) {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mapContainer}>
-          <MapView
+          {/* <MapView
             ref={mapRef}
             style={styles.map}
             initialRegion={{
@@ -141,7 +139,8 @@ export default function CustomerDashboard({ navigation }) {
             followsUserLocation={true}
           >
             <Marker coordinate={curLoc} title="Current Location" />
-          </MapView>
+          </MapView> */}
+          <Image source={require("../../Images/map.png")} style={styles.map} />
         </View>
 
         <View style={styles.contentContainer}>
@@ -165,7 +164,7 @@ export default function CustomerDashboard({ navigation }) {
 
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={() => navigation.navigate("NewRequest")}
+        // onPress={() => navigation.navigate("NewRequest")}
       >
         <Ionicons name="add" size={30} color="#FFFFFF" />
       </TouchableOpacity>
@@ -197,7 +196,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    height: 250,
   },
   contentContainer: {
     paddingHorizontal: 20,

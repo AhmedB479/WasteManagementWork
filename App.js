@@ -72,11 +72,11 @@ function CustomDrawerContent(props) {
       <View style={styles.profileSection}>
         <Image
           source={{
-            uri: "https://media.licdn.com/dms/image/v2/D4D03AQGECoLz8fKYmw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1731497499828?e=1740009600&v=beta&t=UBUC5WpPn8t1elW2fR0oh3H3auEjjDGS48H8kEje6Hg",
-          }} 
+            uri: "https://wallpaperaccess.com/full/2562964.jpg",
+          }}
           style={styles.profileImage}
         />
-        <Text style={styles.profileName}>Mr. Nasir Ansari</Text> 
+        <Text style={styles.profileName}>Mr. Nasir Ansari</Text>
       </View>
 
       {/* Drawer Items */}

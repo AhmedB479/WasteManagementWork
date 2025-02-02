@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Image } from "react-native";
 import MapView, { Marker } from 'react-native-maps';
 
 export default function CustomerPanel() {
@@ -19,13 +19,18 @@ export default function CustomerPanel() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Customer Panel</Text>
-      <MapView
+      {/* <MapView
         style={styles.map}
         initialRegion={location}
         onRegionChangeComplete={setLocation}
       >
         <Marker coordinate={location} />
-      </MapView>
+      </MapView> */}
+      <Image
+        source={require("../Images/map.png")}
+        style={styles.map}
+        resizeMode="cover"
+      />
       <Button title="Request Pickup" onPress={addRequest} />
       <Text>Active Requests: {requests.length}</Text>
     </View>
